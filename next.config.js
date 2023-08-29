@@ -3,6 +3,17 @@ const nextConfig = {
   experimental: {
     appDir: true,
   },
-}
+  webpack: (config) => {
+    config.externals.push({
+      'utf-8-validate': 'commonjs utf-8-validate',
+      bufferutil: 'commonjs bufferutil',
+    });
 
-module.exports = nextConfig
+    return config;
+  },
+  images: {
+    domains: ['uploadthing.com', 'img.clerk.com'],
+  },
+};
+
+module.exports = nextConfig;

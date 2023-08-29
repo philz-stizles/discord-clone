@@ -1,36 +1,100 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Discord Clone
 
-## Getting Started
+## Table of contents
 
-First, run the development server:
+1. [Next Features](#1-next-features)
+2. [Technologies](#2-technologies)
+3. [Create Next App](#3-create-next-app)
+4. [Stop In-use PORT](#4-stop-in-use-port)
+5. [Run Project](#run-project)
+6. [TypeScript](#typescript)
+7. [Icons using lucide-react](#icons-using-lucide-react-read-docs)
+8. [Build components using shadcn/ui](#build-components-using-shadcn-ui-read-docs)
+9. [Authentication using Clerk.js & Prisma](https://clerk.com/docs/nextjs/get-started-with-nextjs)
+10. [Modal State Management using zustand](#modal-state-management-using-zustand)
+11. [Forms using shadcn/ui Form](#forms-using-react-hook-form)
+12. [Notifications using React Hot Toast](#notifications-using-react-hot-toast)
+13. [MySQL Database on the cloud using PlanetScale](#mysql-database-on-the-cloud-using-planetscale-read-docs)
+14. [ORM using Prisma with MySQL Database](#orm-using-prisma-with-mysql-database-read-docs)
+15. [File Upload using React Dropzone | ](#password-hash-using-bcrypt)
+16. [Social Authentication with Github](#social-authentication-with-github)
+18. [Testing Using Jest](#testing-using-jest)
+19. [Server-side Rendering(SSR)](#server-side-rendering)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+### 1 Next Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2 Technologies
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+    Next.js 13
+    Styling & Design => Tailwindcss shadcn/ui
+    Database  => MySQL PlanetScale Prism
+    Authentication => Clerk
+    Zustand
 
-[http://localhost:3000/api/hello](http://localhost:3000/api/hello) is an endpoint that uses [Route Handlers](https://beta.nextjs.org/docs/routing/route-handlers). This endpoint can be edited in `app/api/hello/route.ts`.
+### MySQL Database on the cloud using PlanetScale ([Read Docs](https://planetscale.com/docs))
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### ORM using Prisma with MySQL Database ([Read Docs](https://planetscale.com/docs))
 
-## Learn More
+Installation:
 
-To learn more about Next.js, take a look at the following resources:
+    npm install prisma
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+VSCode Extension: Prisma
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Initialize:
 
-## Deploy on Vercel
+    npx prisma init
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Update ".env"
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+    DATABASE_URL="mongodb://127.0.0.1:27017/airbnb"
+
+Generate prisma models
+
+    npx prisma generate
+
+Create Models & Run Migration
+
+    npx prisma db push
+
+Delete Database
+
+    npx prisma migrate reset
+
+### Build components using shadcn/ui ([Read Docs](https://ui.shadcn.com/docs/installation/next))
+
+- Installation:
+
+`npx shadcn-ui@latest init`
+
+- Add Components:
+
+`npx shadcn-ui@latest add avatar badge button command dialog dropdown-menu popover separator alert dropdown-menu checkbox select toast`
+
+### Forms using Shadcn UI | React Hook Form | Zod | Hook Form Resolvers
+
+`npx shadcn-ui@latest add form input label`
+`npm i react-hook-form zod @hookform/resolvers`
+
+### ThemeProvider using Shadcn UI | Next Themes[](https://ui.shadcn.com/docs/dark-mode/next):
+
+### Icons using lucide-react([Read Docs]())
+
+    npm i lucide-react
+
+Authentication using Clerk ([Read Docs](https://clerk.com/docs/nextjs/get-started-with-nextjs))
+
+    npm install @clerk/nextjs
+
+### File Upload using React Dropzone & Uploadthing
+
+`npm i uploadthing @uploadthing/react react-dropzone`
+
+npm install --save-dev cypress start-server-and-test
+
+{
+  "scripts": {
+    
+    "cypress": "cypress open"
+  }
+}
