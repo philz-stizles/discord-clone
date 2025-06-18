@@ -14,21 +14,42 @@ import { Label } from '@/components/ui/label';
 import { useModal } from '@/hooks/use-modal';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { useOrigin } from '@/hooks/use-origin';
 
 const InviteModal = () => {
   const [copied, setCopied] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { onOpen, isOpen, onClose, type, data } = useModal();
+  const origin = useOrigin();
+
+  const { server } = data;
   const isModalOpen = isOpen && type === 'invite';
 
-  const onCopy = () => {};
+  const handleCopy = (inviteUrl: string) => {
+    navigator.clipboard.writeText(inviteUrl);
+    setCopied(true);
 
-  const onNew = async () => {
-    try {
-    } catch (error) {}
+    setTimeout(() => {
+      setCopied(false);
+    }, 1000);
   };
 
-  const inviteUrl = '';
+  const handleGenerateLink = async (serverId?: string) => {
+    try {
+      setIsLoading(true);
+      const response = await axios.patch(
+        `/api/servers/${serverId}/invite-code`
+      );
+
+      onOpen('invite', { server: response.data });
+    } catch (error: any) {
+      console.log(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const inviteUrl = `${origin}/invite/${server?.inviteCode}`;
 
   return (
     <Dialog open={isModalOpen} onOpenChange={onClose}>
@@ -48,7 +69,7 @@ const InviteModal = () => {
               className="bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0"
               value={inviteUrl}
             />
-            <Button disabled={isLoading} onClick={onCopy} size="icon">
+            <Button disabled={isLoading} onClick={() => handleCopy(inviteUrl)} size="icon">
               {copied ? (
                 <Check className="w-4 h-4" />
               ) : (
@@ -57,7 +78,7 @@ const InviteModal = () => {
             </Button>
           </div>
           <Button
-            onClick={onNew}
+            onClick={() => handleGenerateLink(server?.id)}
             disabled={isLoading}
             variant="link"
             size="sm"

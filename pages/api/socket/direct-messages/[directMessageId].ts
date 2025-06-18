@@ -7,14 +7,12 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponseServerIo
 ) {
-  if (req.method !== 'POST') {
+  if (req.method !== 'DELETE' && req.method !== 'PATCH') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
     const { userId } = getAuth(req);
-    const { content, fileUrl } = req.body;
-    const { serverId, channelId } = req.query;
 
     if (!userId) {
       return null;
@@ -25,6 +23,8 @@ export default async function handler(
         userId,
       },
     });
+    const { serverId, channelId, messageId } = req.query;
+    const { content } = req.body;
 
     if (!profile) {
       return res.status(401).json({ error: 'Unauthorized' });
@@ -36,10 +36,6 @@ export default async function handler(
 
     if (!channelId) {
       return res.status(400).json({ error: 'Channel ID missing' });
-    }
-
-    if (!content) {
-      return res.status(400).json({ error: 'Content missing' });
     }
 
     const server = await prismaClient.server.findFirst({
@@ -55,9 +51,8 @@ export default async function handler(
         members: true,
       },
     });
-
     if (!server) {
-      return res.status(404).json({ message: 'Server not found' });
+      return res.status(404).json({ error: 'Server not found' });
     }
 
     const channel = await prismaClient.channel.findFirst({
@@ -66,40 +61,9 @@ export default async function handler(
         serverId: serverId as string,
       },
     });
-
     if (!channel) {
-      return res.status(404).json({ message: 'Channel not found' });
+      return res.status(404).json({ error: 'Channel not found' });
     }
-
-    const member = server.members.find(
-      (member) => member.profileId === profile.id
-    );
-
-    if (!member) {
-      return res.status(404).json({ message: 'Member not found' });
-    }
-
-    const message = await prismaClient.message.create({
-      data: {
-        memberId: member.id,
-        channelId: channelId as string,
-        content,
-        fileUrl,
-      },
-      include: {
-        member: {
-          include: {
-            profile: true,
-          },
-        },
-      },
-    });
-
-    const channelKey = `chat:${channelId}:messages`;
-
-    res.socket.server.io.emit(channelKey, message)
-
-    return res.status(200).json(message);
   } catch (error) {
     console.log('[MESSAGES_CREATE]', error);
     return res.status(500).json({ message: 'Internal Error' });

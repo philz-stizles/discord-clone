@@ -1,11 +1,9 @@
 import { redirect } from 'next/navigation';
 import { getFirstServer } from '@/actions/servers';
 import { getProfile } from '../../actions/profile';
-import { InitialModal } from '@/components/modals/initial-modal';
+import { InitialModal } from '@/components/modals';
 
-type Props = {};
-
-const SetupPage = async (props: Props) => {
+const SetupPage = async () => {
   const profile = await getProfile();
 
   const server = await getFirstServer(profile.id);

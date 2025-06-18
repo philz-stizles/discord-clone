@@ -1,5 +1,6 @@
 import { getProfile } from '@/actions/profile';
 import { getMemberServer } from '@/actions/servers';
+import { prismaClient } from '@/lib/prisma';
 import { redirectToSignIn } from '@clerk/nextjs';
 import { redirect } from 'next/navigation';
 import React from 'react';
@@ -18,7 +19,26 @@ const ServerPage = async ({ params }: Props) => {
   }
 
   const serverId = params.serverId;
-  const server = await getMemberServer(serverId, profile.id);
+  const server = await prismaClient.server.findUnique({
+    where: {
+      id: serverId,
+      members: {
+        some: {
+          profileId: profile.id,
+        },
+      },
+    },
+    include: {
+      channels: {
+        where: {
+          name: 'general',
+        },
+        orderBy: {
+          createdAt: 'asc',
+        },
+      },
+    },
+  });
 
   const initialChannel = server?.channels[0];
   if (initialChannel?.name !== 'general') {

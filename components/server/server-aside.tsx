@@ -10,6 +10,10 @@ import { ServerMember } from './server-member';
 import {
   MemberRole,
   ChannelType,
+  Server,
+  Channel,
+  Member,
+  Profile,
 } from '@prisma/client';
 import { currentProfile } from '@/actions/profile';
 import { prismaClient } from '@/lib/prisma';
@@ -29,36 +33,36 @@ const roleIconMap = {
 };
 
 type Props = {
-  serverId: string;
+  server: Server & { channels: Channel[], members: (Member & {profile: Profile})[]};
 };
 
-export const ServerAside = async ({ serverId }: Props) => {
+export const ServerAside = async ({ server }: Props) => {
   const profile = await currentProfile();
 
   if (!profile) {
     return redirect('/');
   }
 
-  const server = await prismaClient.server.findUnique({
-    where: {
-      id: serverId,
-    },
-    include: {
-      channels: {
-        orderBy: {
-          createdAt: 'asc',
-        },
-      },
-      members: {
-        include: {
-          profile: true,
-        },
-        orderBy: {
-          role: 'asc',
-        },
-      },
-    },
-  });
+  // const server = await prismaClient.server.findUnique({
+  //   where: {
+  //     id: serverId,
+  //   },
+  //   include: {
+  //     channels: {
+  //       orderBy: {
+  //         createdAt: 'asc',
+  //       },
+  //     },
+  //     members: {
+  //       include: {
+  //         profile: true,
+  //       },
+  //       orderBy: {
+  //         role: 'asc',
+  //       },
+  //     },
+  //   },
+  // });
 
    if (!server) {
      return redirect('/');

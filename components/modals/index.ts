@@ -4,6 +4,8 @@ export { default as DeleteChannelModal } from './delete-channel-modal';
 export { default as CreateServerModal } from './create-server-modal';
 export { default as EditServerModal } from './edit-server-modal';
 export { default as DeleteServerModal } from './delete-server-modal';
+export { default as DeleteMessageModal } from './delete-message-modal';
 export { default as InviteModal } from './invite-modal';
 export { default as MembersModal } from './members-modal';
 export { default as MessageFileModal } from './message-file-modal';
+export { default as InitialModal } from './initial-modal';

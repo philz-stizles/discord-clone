@@ -1,4 +1,4 @@
-import qs from 'query-string';
+'use client';
 
 import {
   Dialog,
@@ -73,12 +73,6 @@ const CreateChannelModal = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      // const url = qs.stringifyUrl({
-      //   url: '/api/channels',
-      //   query: {
-      //     serverId: params?.serverId,
-      //   },
-      // });
       const url = `/api/servers/${params?.serverId}/channels`;
       await axios.post(url, values);
 
@@ -159,7 +153,7 @@ const CreateChannelModal = () => {
               />
             </div>
             <DialogFooter className="bg-gray-100 px-6 py-4">
-              <Button variant="default" disabled={isLoading}>
+              <Button variant="secondary" disabled={isLoading}>
                 Create
               </Button>
             </DialogFooter>

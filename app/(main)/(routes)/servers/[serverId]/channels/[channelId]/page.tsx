@@ -1,8 +1,7 @@
-import { getChannel } from '@/actions/channels';
-import { getMembership } from '@/actions/members';
 import { currentProfile } from '@/actions/profile';
 import { ChatHeader, ChatInput, ChatMessages } from '@/components/chat';
 import { MediaRoom } from '@/components/ui/media-room';
+import { prismaClient } from '@/lib/prisma';
 import { redirectToSignIn } from '@clerk/nextjs';
 import { ChannelType } from '@prisma/client';
 import { redirect } from 'next/navigation';
@@ -21,9 +20,18 @@ const ChannelPage = async ({ params }: Props) => {
     return redirectToSignIn();
   }
 
-  const channel = await getChannel(params.channelId);
+  const channel = await prismaClient.channel.findUnique({
+    where: {
+      id: params.channelId,
+    },
+  });
 
-  const member = await getMembership(params.serverId, profile.id);
+  const member = await prismaClient.member.findFirst({
+    where: {
+      serverId: params.serverId,
+      profileId: profile.id,
+    },
+  });
 
   if (!channel || !member) {
     redirect('/');

@@ -1,5 +1,6 @@
 'use client';
 
+import qs from 'query-string';
 import {
   Dialog,
   DialogContent,
@@ -12,25 +13,24 @@ import { useModal } from '@/hooks/use-modal';
 import { useState } from 'react';
 import { Button } from '../ui/button';
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
 
-type Props = {};
-
-const DeleteServerModal = (props: Props) => {
+const DeleteMessageModal = () => {
   const { isOpen, type, data, onClose } = useModal();
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
-  const { server } = data;
+  const { query, apiUrl } = data;
 
-  const handleConfirm = async (serverId: string) => {
+  const handleConfirm = async () => {
     try {
       setIsLoading(true);
 
-      await axios.delete(`/api/servers/${serverId}`);
+      const url = qs.stringifyUrl({
+        url: apiUrl || '',
+        query,
+      });
+
+      await axios.delete(url);
 
       onClose();
-      router.refresh();
-      router.push('/');
     } catch (error) {
       console.log(error);
     } finally {
@@ -38,21 +38,18 @@ const DeleteServerModal = (props: Props) => {
     }
   };
 
-  const isModalOpen = isOpen && type === 'deleteServer';
+  const isModalOpen = isOpen && type === 'deleteMessage';
 
   return (
     <Dialog open={isModalOpen} onOpenChange={onClose}>
       <DialogContent className="bg-white text-black p-0 overflow-hidden">
         <DialogHeader className="pt-8 px-6">
           <DialogTitle className="text-2xl text-center font-bold">
-            Delete Server
+            Delete Message
           </DialogTitle>
           <DialogDescription className="text-center text-zinc-500">
             Are you sure you want to do this? <br />
-            <span className="text-indigo-500 font-semibold">
-              {server?.name}
-            </span>{' '}
-            will be permanently deleted.
+            The message will be permanently deleted.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="bg-gray-100 px-6 py-4">
@@ -62,8 +59,8 @@ const DeleteServerModal = (props: Props) => {
             </Button>
             <Button
               disabled={isLoading}
-              variant="destructive"
-              onClick={() => server && handleConfirm(server?.id)}
+              variant="secondary"
+              onClick={handleConfirm}
             >
               Confirm
             </Button>
@@ -74,4 +71,4 @@ const DeleteServerModal = (props: Props) => {
   );
 };
 
-export default DeleteServerModal;
+export default DeleteMessageModal;

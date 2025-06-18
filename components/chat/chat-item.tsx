@@ -63,6 +63,7 @@ const ChatItem = ({
       content: content,
     },
   });
+  const { onOpen } = useModal();
   const router = useRouter();
 
   const fileType = fileUrl?.split('.').pop();
@@ -75,6 +76,11 @@ const ChatItem = ({
 
   const onMemberClick = () => {};
 
+  const isAdmin = currentMember.role === MemberRole.ADMIN;
+  const isModerator = currentMember.role === MemberRole.MODERATOR;
+  const isOwner = currentMember.id === member.id;
+  const canDeleteMessage = !isDeleted && (isAdmin || isModerator || isOwner);
+  const canEditMessage = !isDeleted && isOwner && !fileUrl;
   const isPDF = fileType === 'pdf' && fileUrl;
   const isImage = !isPDF && fileUrl;
 
@@ -183,7 +189,7 @@ const ChatItem = ({
           )}
         </div>
       </div>
-      {/* {canDeleteMessage && (
+      {canDeleteMessage && (
         <div className="hidden group-hover:flex items-center gap-x-2 absolute p-1 -top-2 right-5 bg-white dark:bg-zinc-800 border rounded-sm">
           {canEditMessage && (
             <ActionTooltip label="Edit">
@@ -205,7 +211,7 @@ const ChatItem = ({
             />
           </ActionTooltip>
         </div>
-      )} */}
+      )}
     </div>
   );
 };

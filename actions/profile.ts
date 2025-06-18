@@ -7,6 +7,8 @@ export const getProfile = async () => {
   try {
     const user = await currentUser();
 
+    console.log('user: ', user)
+
     if (!user) {
       return redirectToSignIn();
     }

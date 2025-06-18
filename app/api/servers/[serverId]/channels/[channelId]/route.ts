@@ -14,7 +14,7 @@ export async function PATCH(req: Request, { params }: Params) {
     const serverId = params.serverId;
     const channelId = params.channelId;
 
-    validationMiddleware(profile, serverId, channelId);
+    validation(profile, serverId, channelId);
 
     if (name === 'general') {
       return new NextResponse("Name cannot be 'general'", { status: 400 });
@@ -63,7 +63,7 @@ export async function DELETE(req: Request, { params }: Params) {
     const serverId = params.serverId;
     const channelId = params.channelId;
 
-    validationMiddleware(profile, serverId, channelId);
+    validation(profile, serverId, channelId);
 
     const server = await prismaClient.server.update({
       where: {
@@ -96,7 +96,7 @@ export async function DELETE(req: Request, { params }: Params) {
   }
 }
 
-const validationMiddleware = (
+const validation = (
   profile: Profile | null,
   serverId: string,
   channelId: string

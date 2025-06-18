@@ -36,7 +36,7 @@ const formSchema = z.object({
   }),
 });
 
-export const InitialModal = () => {
+const InitialModal = () => {
   const [isMounted, setIsMounted] = useState(false);
 
   const router = useRouter();
@@ -61,7 +61,7 @@ export const InitialModal = () => {
 
       form.reset();
       router.refresh();
-      // window.location.reload();
+      window.location.reload();
     } catch (error) {
       console.log(error);
     }
@@ -136,3 +136,5 @@ export const InitialModal = () => {
     </Dialog>
   );
 };
+
+export default InitialModal;

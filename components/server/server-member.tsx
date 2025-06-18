@@ -4,8 +4,7 @@ import { Member, MemberRole, Profile, Server } from '@prisma/client';
 import { ShieldAlert, ShieldCheck } from 'lucide-react';
 import { UserAvatar } from '@/components/ui/user-avatar';
 import { cn } from '@/lib/utils';
-import { useParams } from 'next/navigation';
-import { useRouter } from 'next/router';
+import { useParams, useRouter } from 'next/navigation';
 
 const roleIconMap = {
   [MemberRole.GUEST]: null,
